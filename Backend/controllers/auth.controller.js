@@ -46,7 +46,7 @@ export const signup = async (req, res) => {
             res.status(400).json({msg: "Username is already taken."});
             return;
         }
-        const profilePic = "https://ui-avatars.com/api/?name=" + fullname;
+        const profilePic = "https://ui-avatars.com/api/?name=" + fullname + "&background=random";
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const newUser = new User({
