@@ -8,15 +8,14 @@ export const login = async (req, res) => {
         const {username, password} = req.body;
         const user = await User.findOne({username});
         if(!user){
-            res.status(400).json({msg: "Invalid Username"});
-            return;
+            return res.status(400).json({error: "Invalid Username"});
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch){
-            res.status(400).json({msg: "Invalid Password"});
-            return;
+           return  res.status(400).json({error: "Invalid Password"});
         }
         const token = generateToken(user._id, res);
+        console.log(token);
         res.status(201).json({
             _id: user._id,
             fullname: user.fullname,
@@ -24,7 +23,7 @@ export const login = async (req, res) => {
             profilePic: user.profilePic,
         })
    } catch (error) {
-        res.status(500).json({msg: "Server Error"});
+        return res.status(500).json({error: "Server Error"});
    }
 };
 export const logout = (req, res) => {
@@ -47,7 +46,7 @@ export const signup = async (req, res) => {
             res.status(400).json({msg: "Username is already taken."});
             return;
         }
-        const profilePic = "https://i.pravatar.cc/300";
+        const profilePic = "https://ui-avatars.com/api/?name=" + fullname;
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const newUser = new User({

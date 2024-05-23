@@ -9,5 +9,6 @@ const generateToken = (userId, res) => {
     sameSite: 'strict',// prevent CSRF attacks 
     secure: process.env.NODE_ENV !== 'development'
   })
+  
 }
 export default generateToken;
